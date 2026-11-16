@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestor de Inventario · AuFBau</title>
+  <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">AufBau</a>
+    <div class="heading">
+      <strong>Auditoría de Inventario en Tienda · AufBau</strong>
+      <span class="subtitle">Base de Datos MySQL: Inventario</span>
+    </div>
+    <div class="header-actions">
+      <span class="connection offline" id="connection-status"><i></i> Conectando...</span>
+      <button class="button" id="refresh-button" type="button">Actualizar datos</button>
+      <a class="button primary" href="#nuevo-producto">+ Nuevo producto</a>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="notice warning" id="notice" role="status">Conectando con el servidor y la base de datos...</div>
+    <section class="stats" aria-label="Resumen del inventario">
+      <article class="card stat">
+        <span>Productos en BD</span>
+        <strong id="product-count">—</strong>
+        <small>Productos registrados</small>
+      </article>
+      <article class="card stat">
+        <span>Coinciden exacto</span>
+        <strong class="green" id="exact-count">—</strong>
+        <small>Cantidad tienda = Cantidad sistema</small>
+      </article>
+      <article class="card stat">
+        <span>Discrepancias</span>
+        <strong class="red" id="discrepancy-count">—</strong>
+        <small><span id="missing-count">—</span> faltantes · <span id="surplus-count">—</span> sobrantes</small>
+      </article>
+      <article class="card stat">
+        <span>Precisión de inventario</span>
+        <strong><span id="precision">—</span><span id="precision-sign"></span></strong>
+        <progress class="progress" id="precision-bar" value="0" max="100">0%</progress>
+      </article>
+    </section>
+
+    <section class="card scan">
+      <form class="scan-form" id="scan-form">
+        <label class="sr-only" for="scan-code">Código del producto</label>
+        <input id="scan-code" name="codigo" placeholder="Escanear o introducir código del producto AufBau..." required disabled>
+        <button class="button primary" type="submit" disabled>Continuar (+1)</button>
+      </form>
+      <p class="hint">Cada lectura agrega una unidad al conteo físico.</p>
+    </section>
+
+    <section class="card inventory">
+      <div class="toolbar">
+        <nav class="filters" aria-label="Filtrar productos">
+          <button class="filter active" data-filter="todos" type="button">Todos</button>
+          <button class="filter" data-filter="coinciden" type="button">Coinciden</button>
+          <button class="filter" data-filter="faltantes" type="button">Faltantes</button>
+          <button class="filter" data-filter="sobrantes" type="button">Sobrantes</button>
+        </nav>
+        <div class="search">
+          <label class="sr-only" for="search-products">Buscar productos</label>
+          <input id="search-products" placeholder="Buscar por código, nombre o categoría" disabled>
+        </div>
+        <button class="button success" id="report-button" type="button" disabled>Generar reporte</button>
+        <button class="button" id="export-button" type="button" disabled>Exportar CSV</button>
+      </div>
+      <div class="table-wrap">
+        <table class="inventory-table">
+          <thead><tr>
+            <th>Código (SKU)</th><th>Producto / Categoría</th>
+            <th>Cant. tienda (físico)</th><th>Cant. base de datos</th>
+            <th>Diferencia</th><th>Estado</th>
+          </tr></thead>
+          <tbody id="inventory-rows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="forms-grid">
+      <article class="card form-card" id="nuevo-producto">
+        <h2>Nuevo producto</h2>
+        <form id="product-form">
+          <label>Código (SKU)<input name="codigo" maxlength="45" required disabled></label>
+          <label>Nombre<input name="nombre" maxlength="45" required disabled></label>
+          <label>Categoría<input name="categoria" maxlength="45" required disabled></label>
+          <label>Stock inicial del sistema<input name="stock" type="number" min="0" value="0" required disabled></label>
+          <button class="button primary" type="submit" disabled>Guardar producto</button>
+        </form>
+      </article>
+      <article class="card form-card">
+        <h2>Actualizar stock del sistema</h2>
+        <form id="stock-form">
+          <label>Producto<select name="producto" required disabled></select></label>
+          <label>Nueva cantidad en sistema<input name="cantidad" type="number" min="0" required disabled></label>
+          <button class="button primary" type="submit" disabled>Guardar stock</button>
+        </form>
+      </article>
+      <article class="card form-card">
+        <h2>Guardar conteo físico</h2>
+        <form id="count-form">
+          <label>Producto<select name="producto" required disabled></select></label>
+          <label>Cantidad contada<input name="cantidad" type="number" min="0" required disabled></label>
+          <button class="button success" type="submit" disabled>Guardar conteo</button>
+        </form>
+      </article>
+    </section>
+
+    <section class="card database">
+      <h2>Tablas en base de datos <span>(Inventario)</span></h2>
+      <nav class="tabs" aria-label="Tablas de MySQL">
+        <button class="tab active" data-table="Producto" type="button">Producto</button>
+        <button class="tab" data-table="Stock_Sistema" type="button">Stock Sistema</button>
+        <button class="tab" data-table="Reg_Conteo" type="button">Reg Conteo</button>
+        <button class="tab" data-table="Reporte_Diferencias" type="button">Reporte Diferencias</button>
+        <button class="tab" data-table="Comparacion_Inv" type="button">Comparacion Inv</button>
+      </nav>
+      <div class="table-wrap">
+        <table>
+          <thead><tr id="database-headings"></tr></thead>
+          <tbody id="database-rows"></tbody>
+        </table>
+      </div>
+    </section>
+    <footer>Gestor de inventario · Datos almacenados en MySQL</footer>
+  </main>
+  <script src="static/app.js" defer></script>
+</body>
+</html>
