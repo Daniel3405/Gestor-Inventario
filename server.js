@@ -8,10 +8,10 @@ const mysql = require("mysql2/promise");
 const root = __dirname;
 const port = Number(process.env.PORT || 3000);
 const database = mysql.createPool({
-  host: process.env.MYSQL_HOST || "localhost",
-  user: process.env.MYSQL_USER || "root",
-  password: process.env.MYSQL_PASSWORD || "12345",
-  database: process.env.MYSQL_DATABASE || "Inventario",
+  host: process.env.MYSQL_HOST || "srv2.cpanelhost.cl",
+  user: process.env.MYSQL_USER || "cma120225_cma120225",
+  password: process.env.MYSQL_PASSWORD || "UWyLrUPfaOmmZVBDYPIK",
+  database: process.env.MYSQL_DATABASE || "cma120225_pruebawilliam",
   waitForConnections: true,
   connectionLimit: 5,
   dateStrings: true
