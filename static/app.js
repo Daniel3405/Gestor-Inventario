@@ -79,7 +79,7 @@ async function refreshData(successMessage) {
     dataLoaded = true;
     render();
     document.getElementById("connection-status").className = "connection";
-    document.getElementById("connection-status").lastChild.textContent = " MySQL conectado";
+    document.getElementById("connection-status").lastChild.textContent = " cPanleHost conectado";
     if (successMessage) showMessage(successMessage, "success");
     return true;
   } catch (error) {
@@ -87,7 +87,7 @@ async function refreshData(successMessage) {
     dataLoaded = false;
     render();
     document.getElementById("connection-status").className = "connection offline";
-    document.getElementById("connection-status").lastChild.textContent = " MySQL desconectado";
+    document.getElementById("connection-status").lastChild.textContent = " cPanelHost desconectado";
     showMessage(error.message, "error");
     return false;
   }
