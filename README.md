@@ -1,6 +1,6 @@
 Cmd Inicio
-npm install
-npm start
+(npm install)
+(npm start)
 en caso de no funcionar 
-npm.cmd install
-npm.cmd start
+(npm.cmd install)
+(npm.cmd start)
